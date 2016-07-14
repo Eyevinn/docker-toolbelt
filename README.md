@@ -48,6 +48,21 @@ Now you can for example run ffprobe on a file on your local computer:
 
     eyevinn@cb78e699371d:~$ ffprobe /mnt/Movies/trailer.mp4
 
+## Helper script
+
+We have also provided a helper script (this repository) to startup the Docker container and mount your home directory to /mnt. First download the script
+
+    git clone https://github.com/Eyevinn/docker-toolbelt.git
+    
+Then build and install the script
+
+    python setup.py build
+    sudo python setup.py install
+
+To startup the container you then only have to run the script
+
+    streaming-toolbelt
+
 # How to contact us
 We are happy to receive feedback and ideas on more tools we should add to this toolbelt. Drop us an email at info@eyevinn.se or chat with us on Twitter (https://twitter.com/InfoEyevinn)
 
