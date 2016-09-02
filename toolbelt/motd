@@ -1,0 +1,31 @@
+Welcome to Eyevinn Technology's streaming toolbelt
+
+If you don't want to run as super user:
+
+   su - eyevinn
+
+Installed pre-compiled packages for:
+ - ffmpeg
+ - Bento4 (https://www.bento4.com)
+ - Shaka Packager (https://github.com/google/shaka-packager)
+
+Enjoy!
+
+Questions about this Docker image? Send an email to us at info@eyevinn.se or chat
+with us on Twitter (@InfoEyevinn)
+root@812cef3aa2c2:/# cat /etc/motd 
+Welcome to Eyevinn Technology's streaming toolbelt
+
+If you don't want to run as super user:
+
+   su - eyevinn
+
+Installed pre-compiled packages for:
+ - ffmpeg
+ - Bento4 (https://www.bento4.com)
+ - Shaka Packager (https://github.com/google/shaka-packager)
+
+Enjoy!
+
+Questions about this Docker image? Send an email to us at info@eyevinn.se or chat
+with us on Twitter (@InfoEyevinn)

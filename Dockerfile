@@ -74,3 +74,6 @@ RUN cd /root/source/ && \
 COPY build/install-bento4.sh /root/build/
 RUN /root/build/install-bento4.sh
 RUN pip install hls2dash
+ADD toolbelt/motd /etc/motd
+ADD toolbelt/bash.bashrc /etc/bash.bashrc
+RUN useradd -m -p changeme -s /bin/bash eyevinn
