@@ -26,6 +26,8 @@ RUN apt-get update && apt-get install -y --force-yes \
   vim \
   wget \
   yasm \
+  cmake \
+  mercurial \
   zlib1g-dev
 RUN mkdir /root/source
 RUN mkdir /root/source/ffmpeg
@@ -47,6 +49,11 @@ RUN cd /root/source/ffmpeg && \
   make install && \
   make clean 
 RUN cd /root/source/ffmpeg && \
+  hg clone https://bitbucket.org/multicoreware/x265 && \
+  cd x265/build/linux && \
+  PATH="$HOME/bin:$PATH" cmake -G "Unix Makefiles" -DENABLE_SHARED:bool=off ../../source && \
+  make && make install
+RUN cd /root/source/ffmpeg && \
   wget http://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2 && \
   tar xjvf ffmpeg-snapshot.tar.bz2 && \
   cd ffmpeg && \
@@ -62,6 +69,7 @@ RUN cd /root/source/ffmpeg && \
     --enable-libvorbis \
     --enable-libvpx \
     --enable-libx264 \
+    --enable-libx265 \
     --enable-nonfree && \
   make && \
   make install && \
