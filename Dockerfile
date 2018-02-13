@@ -28,7 +28,14 @@ RUN apt-get update && apt-get install -y --force-yes \
   yasm \
   cmake \
   mercurial \
-  zlib1g-dev
+  zlib1g-dev \
+  gfortran \
+  libhdf5-dev \
+  liblapack-dev \
+  python-setuptools \
+  python-tk
+RUN pip install --ignore-installed --upgrade pip
+RUN pip install numpy scipy matplotlib notebook pandas sympy nose scikit-learn h5py
 RUN mkdir /root/source
 RUN mkdir /root/source/ffmpeg
 RUN cd /root/source/ffmpeg && \ 
@@ -54,6 +61,13 @@ RUN cd /root/source/ffmpeg && \
   PATH="$HOME/bin:$PATH" cmake -G "Unix Makefiles" -DENABLE_SHARED:bool=off ../../source && \
   make && make install
 RUN cd /root/source/ffmpeg && \
+  git clone https://github.com/Netflix/vmaf && \
+  cd vmaf && \
+  git submodule update --init --recursive && \
+  make && \
+  export PYTHONPATH="$(pwd)/python/src:$(pwd)/sureal/python/src:$PYTHONPATH" && \
+  make install 
+RUN cd /root/source/ffmpeg && \
   wget http://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2 && \
   tar xjvf ffmpeg-snapshot.tar.bz2 && \
   cd ffmpeg && \
@@ -69,7 +83,8 @@ RUN cd /root/source/ffmpeg && \
     --enable-libvorbis \
     --enable-libvpx \
     --enable-libx264 \
-    --enable-libx265 \
+    --enable-version3 \
+    --enable-libvmaf \
     --enable-nonfree && \
   make && \
   make install && \
