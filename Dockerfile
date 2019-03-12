@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 MAINTAINER Eyevinn Technology <info@eyevinn.se>
 RUN apt-get update && apt-get install -y --force-yes \
   autoconf \
@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --force-yes \
   curl \
   git \
   apache2 \
-  libapache2-mod-php5 \
+  libapache2-mod-php \
   libass-dev \
   libcurl4-openssl-dev \
   libfreetype6-dev \
@@ -55,11 +55,12 @@ RUN cd /root/source/ffmpeg && \
   make && \
   make install && \
   make clean 
-RUN cd /root/source/ffmpeg && \
-  hg clone https://bitbucket.org/multicoreware/x265 && \
-  cd x265/build/linux && \
-  PATH="$HOME/bin:$PATH" cmake -G "Unix Makefiles" -DENABLE_SHARED:bool=off ../../source && \
-  make && make install
+RUN apt-get install -y --force-yes cmake-curses-gui
+#RUN cd /root/source/ffmpeg && \
+#  hg clone https://bitbucket.org/multicoreware/x265 && \
+#  cd x265/build/linux && \
+#  PATH="$HOME/bin:$PATH" cmake -G "Unix Makefiles" -DENABLE_SHARED=off ../../source && \
+#  make && make install
 RUN cd /root/source/ffmpeg && \
   git clone https://github.com/Netflix/vmaf && \
   cd vmaf && \
@@ -67,6 +68,12 @@ RUN cd /root/source/ffmpeg && \
   make && \
   export PYTHONPATH="$(pwd)/python/src:$(pwd)/sureal/python/src:$PYTHONPATH" && \
   make install 
+RUN mkdir -p /root/source/ffmpeg/libaom && \
+  cd /root/source/ffmpeg/libaom && \
+  git clone https://aomedia.googlesource.com/aom && \
+  cmake ./aom && \
+  make && \
+  make install
 RUN cd /root/source/ffmpeg && \
   wget http://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2 && \
   tar xjvf ffmpeg-snapshot.tar.bz2 && \
@@ -83,6 +90,8 @@ RUN cd /root/source/ffmpeg && \
     --enable-libvorbis \
     --enable-libvpx \
     --enable-libx264 \
+#    --enable-libx265 \
+    --enable-libaom \
     --enable-version3 \
     --enable-libvmaf \
     --enable-nonfree && \
@@ -96,8 +105,8 @@ RUN cd /root/source/ && \
   scons -u build_config=Release
 COPY build/install-bento4.sh /root/build/
 RUN /root/build/install-bento4.sh
-RUN pip install hls2dash
-RUN pip install hlsorigin
+#RUN pip install hls2dash
+#RUN pip install hlsorigin
 ADD toolbelt/motd /etc/motd
 ADD toolbelt/bash.bashrc /etc/bash.bashrc
 RUN useradd -m -p changeme -s /bin/bash eyevinn
